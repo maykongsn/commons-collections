@@ -178,6 +178,10 @@ public class CollectionUtilsTest extends MockTestCase {
         verify();
     }
 
+    /*
+     * DUPLICATE ASSERTION
+     */
+
     @Test
     public void addIgnoreNull() {
         final Set<String> set = new HashSet<>();
@@ -186,6 +190,14 @@ public class CollectionUtilsTest extends MockTestCase {
         set.add("3");
         assertFalse(CollectionUtils.addIgnoreNull(set, null));
         assertEquals(3, set.size());
+    }
+    
+    @Test
+    public void addIgnoreNullString() {
+        final Set<String> set = new HashSet<>();
+        set.add("1");
+        set.add("2");
+        set.add("3");
         assertFalse(CollectionUtils.addIgnoreNull(set, "1"));
         assertEquals(3, set.size());
         assertTrue(CollectionUtils.addIgnoreNull(set, "4"));
@@ -242,6 +254,10 @@ public class CollectionUtilsTest extends MockTestCase {
         assertEquals(2, CollectionUtils.cardinality("E", bag));
     }
 
+    /*
+     * DUPLICATE ASSERTION
+     */
+    
     @Test
     @Deprecated
     public void cardinalityOfNull() {
@@ -251,31 +267,13 @@ public class CollectionUtilsTest extends MockTestCase {
             final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
             assertNull(freq.get(null));
         }
-        list.add("A");
-        assertEquals(0, CollectionUtils.cardinality(null, list));
-        {
-            final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
-            assertNull(freq.get(null));
-        }
         list.add(null);
         assertEquals(1, CollectionUtils.cardinality(null, list));
         {
             final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
             assertEquals(Integer.valueOf(1), freq.get(null));
         }
-        list.add("B");
-        assertEquals(1, CollectionUtils.cardinality(null, list));
-        {
-            final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
-            assertEquals(Integer.valueOf(1), freq.get(null));
-        }
         list.add(null);
-        assertEquals(2, CollectionUtils.cardinality(null, list));
-        {
-            final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
-            assertEquals(Integer.valueOf(2), freq.get(null));
-        }
-        list.add("B");
         assertEquals(2, CollectionUtils.cardinality(null, list));
         {
             final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
@@ -284,8 +282,33 @@ public class CollectionUtilsTest extends MockTestCase {
         list.add(null);
         assertEquals(3, CollectionUtils.cardinality(null, list));
         {
+           final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
+           assertEquals(Integer.valueOf(3), freq.get(null));
+        }
+    }
+    
+    @Test
+    public void cardinalityOfNullAddingString() {
+        final List<String> list = new ArrayList<>();
+        list.add("A");
+        assertEquals(0, CollectionUtils.cardinality(null, list));
+        {
+           final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
+           assertNull(freq.get(null));
+        }
+        list.add(null);
+        list.add("B");
+        assertEquals(1, CollectionUtils.cardinality(null, list));
+        {
             final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
-            assertEquals(Integer.valueOf(3), freq.get(null));
+            assertEquals(Integer.valueOf(1), freq.get(null));
+        }
+        list.add(null);
+        list.add("B");
+        assertEquals(2, CollectionUtils.cardinality(null, list));
+        {
+            final Map<String, Integer> freq = CollectionUtils.getCardinalityMap(list);
+            assertEquals(Integer.valueOf(2), freq.get(null));
         }
     }
 
